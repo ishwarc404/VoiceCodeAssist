@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Voice Code Assist</title>
+</head>
+<body>
+
+  
+  <textarea rows="30" cols="50" id="code_holder">
+    This text will be replaced
+  </textarea>
+
+
+  <form action="killswitch">
+    <button>KILL ALL</button>
+  </form>
+
+  <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.7.3/socket.io.min.js"></script>
+  <script type="text/javascript">
+
+        
+        
+      
+  var socket = io.connect('http://' + document.domain + ':' + location.port);
+
+
+    // console.log("Triggering my event");
+    socket.on( 'connect', function() { //this is used to connect 
+      socket.emit( 'my event', { //my event is triggered
+        data: 'User Connected'
+      } )
+    } )
+
+  
+
+    //getting the response from the client
+    socket.on( 'my response', function( msg ) {
+      console.log("Data recieved from the server");
+      data_recieved = JSON.parse(msg)
+      console.log(data_recieved)
+    //   if( typeof msg.user_name !== 'undefined' ) 
+      {
+        var textarea = document.getElementById("code_holder")
+        console.log(textarea.value)
+        var old_code_data = textarea.value + "\n"
+        textarea.value = old_code_data + data_recieved.user_name+ ":" + data_recieved.message 
+      }
+    })
+  
+
+  </script>
+
+</body>
+</html>
